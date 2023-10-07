@@ -1,0 +1,60 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background-color: rgb(61, 64, 91);
+}
+
+.page-container {
+	height: 100vh;
+	overflow: hidden;
+}
+
+.calculator {
+	width: 250px;
+	margin: 20vh auto;
+	padding: 10px;
+	border: 2px black solid;
+  border-radius: 10px;
+	background-color: rgb(95, 97, 120);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+	justify-content: space-between;
+}
+
+.display {
+	margin: 10px;
+	border: 2px black solid;
+	width: 230px;
+	height: 80px;
+  border-radius: 10px;
+}
+
+.clear,
+.delete {
+	width: 112px;
+}
+
+.numbers-and-operators {
+	display: flex;
+}
+
+.operators {
+	display: flex;
+	flex-direction: column;
+}
+
+button {
+	height: 45px;
+	width: 50px;
+	margin: 5px;
+  border-radius: 10px;
+	font-size: 15px;
+	border: 2px black solid;
+}
+
+button,
+.display {
+	background-color: rgb(213, 197, 200);
+}
