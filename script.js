@@ -1,4 +1,7 @@
 const buttons = document.querySelectorAll("button");
+const display = document.querySelector('.display');
+const calculation = document.querySelector(".calculation")
+const buttonContainer = document.querySelector('.button-container');
 
 const button1 = document.querySelector(".btn-1");
 const button2 = document.querySelector(".btn-2");
@@ -31,9 +34,18 @@ buttons.forEach(button => {
 	});
 });
 
+buttonContainer.addEventListener('click', (event) => {
+	if (event.target.tagName === 'BUTTON') {
+			const buttonText = event.target.textContent;
+			displayValue += buttonText;
+			calculation.textContent = displayValue;
+	}
+});
+
 let num1;
 let operator;
 let num2;
+let displayValue = "";
 
 function add(a, b) {
 	return a + b;

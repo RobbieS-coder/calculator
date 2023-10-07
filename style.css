@@ -29,6 +29,8 @@ body, html {
 	width: 230px;
 	height: 80px;
   border-radius: 10px;
+	display: flex;
+	flex-direction: column;
 }
 
 .clear,
@@ -36,13 +38,28 @@ body, html {
 	width: 112px;
 }
 
-.numbers-and-operators {
+.button-container {
 	display: flex;
 }
 
 .operators {
 	display: flex;
 	flex-direction: column;
+}
+
+.calculation,
+.answer {
+	margin: 5px;
+}
+
+.calculation {
+	font-size: 22px;
+}
+
+.answer {
+	text-align: right;
+	margin-top: auto;
+	font-size: 18px;
 }
 
 button {
