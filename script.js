@@ -3,6 +3,7 @@ const del = document.querySelector(".delete");
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector(".display");
 const calculation = document.querySelector(".calculation");
+const answer = document.querySelector(".answer");
 const buttonContainer = document.querySelector(".button-container");
 
 const button1 = document.querySelector(".btn-1");
@@ -39,6 +40,7 @@ buttons.forEach(button => {
 clear.addEventListener("click", () => {
 	displayValue = "";
 	calculation.textContent = displayValue;
+	answer.textContent = "";
 });
 
 del.addEventListener("click", () => {
@@ -50,46 +52,64 @@ del.addEventListener("click", () => {
 	}
 
 	calculation.textContent = displayValue;
+	answer.textContent = "";
 });
 
 buttonContainer.addEventListener("click", (event) => {
 	if (event.target.tagName === "BUTTON") {
-			const buttonText = event.target.textContent;
-			displayValue += buttonText;
-			calculation.textContent = displayValue;
+		const buttonText = event.target.textContent;
+		displayValue += buttonText;
+		calculation.textContent = displayValue;
+	}
+
+	if (event.target.textContent !== " =") {
+		answer.textContent = "";
 	}
 });
 
-let num1;
-let operator;
-let num2;
-let displayValue = "";
-
-function add(a, b) {
-	return a + b;
-}
-
-function subtract(a, b) {
-	return a - b;
-}
-
-function multiply(a, b) {
-	return a * b;
-}
-
-function divide(a, b) {
-	return a / b;
-}
-
-function operate(a, operator, b) {
-	switch (operator) {
-		case "+":
-			return add(a, b);
-		case "-":
-			return subtract(a, b);
-		case "*":
-			return multiply(a, b);
-		case "/":
-			return divide(a, b);
+buttonEquals.addEventListener("click", () => {
+	if (displayValue.at(0) === " " ||
+	displayValue.includes("  ")) {
+		answer.textContent = "Syntax Error";
+	} else {
+		let answerValue = operate(displayValue);
+		answer.textContent = answerValue;
+		// displayValue = "";
 	}
+});
+
+function operate(calc) {
+  const tokens = calc.split(" ");
+  let result = parseFloat(tokens[0]);
+
+  for (let i = 1; i < tokens.length; i += 2) {
+    const operator = tokens[i];
+    const nextNumber = parseFloat(tokens[i + 1]);
+
+    if (isNaN(nextNumber)) {
+      return "Syntax Error";
+    }
+
+    switch (operator) {
+      case "+":
+        result += nextNumber;
+        break;
+      case "-":
+        result -= nextNumber;
+        break;
+      case "x":
+        result *= nextNumber;
+        break;
+      case "÷":
+        if (nextNumber === 0) {
+          return "Don't try to be clever";
+        }
+        result /= nextNumber;
+        break;
+    }
+  }
+
+  return result.toString();
 }
+
+let displayValue = "";
