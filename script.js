@@ -1,7 +1,9 @@
+const clear = document.querySelector(".clear");
+const del = document.querySelector(".delete");
 const buttons = document.querySelectorAll("button");
-const display = document.querySelector('.display');
-const calculation = document.querySelector(".calculation")
-const buttonContainer = document.querySelector('.button-container');
+const display = document.querySelector(".display");
+const calculation = document.querySelector(".calculation");
+const buttonContainer = document.querySelector(".button-container");
 
 const button1 = document.querySelector(".btn-1");
 const button2 = document.querySelector(".btn-2");
@@ -34,8 +36,24 @@ buttons.forEach(button => {
 	});
 });
 
-buttonContainer.addEventListener('click', (event) => {
-	if (event.target.tagName === 'BUTTON') {
+clear.addEventListener("click", () => {
+	displayValue = "";
+	calculation.textContent = displayValue;
+});
+
+del.addEventListener("click", () => {
+	// Check if last character is a number or operator
+	if (displayValue.at(-1) === " ") {
+		displayValue = displayValue.slice(0, -3);
+	} else {
+		displayValue = displayValue.slice(0, -1);
+	}
+
+	calculation.textContent = displayValue;
+});
+
+buttonContainer.addEventListener("click", (event) => {
+	if (event.target.tagName === "BUTTON") {
 			const buttonText = event.target.textContent;
 			displayValue += buttonText;
 			calculation.textContent = displayValue;
@@ -67,17 +85,11 @@ function operate(a, operator, b) {
 	switch (operator) {
 		case "+":
 			return add(a, b);
-			break;
 		case "-":
 			return subtract(a, b);
-			break;
 		case "*":
 			return multiply(a, b);
-			break;
 		case "/":
 			return divide(a, b);
-			break;
-		default:
-			return "Invalid operator";
 	}
 }
