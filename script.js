@@ -29,114 +29,142 @@ let num2 = "";
 let op = "";
 
 buttons.forEach(button => {
-	button.addEventListener("mouseenter", () => {
-			button.style.backgroundColor = "rgb(185, 180, 182)";
-	});
+  button.addEventListener("mouseenter", () => {
+    button.style.backgroundColor = "rgb(185, 180, 182)";
+  });
 
-	button.addEventListener("mouseleave", () => {
-			button.style.backgroundColor = "rgb(213, 197, 200)";
-	});
+  button.addEventListener("mouseleave", () => {
+    button.style.backgroundColor = "rgb(213, 197, 200)";
+  });
 
-	button.addEventListener("mousedown", () => {
-		button.style.backgroundColor = "rgb(157, 163, 164)";
-	});
+  button.addEventListener("mousedown", () => {
+    button.style.backgroundColor = "rgb(157, 163, 164)";
+  });
 
-	button.addEventListener("mouseup", () => {
-		button.style.backgroundColor = "rgb(185, 180, 182)";
-	});
+  button.addEventListener("mouseup", () => {
+    button.style.backgroundColor = "rgb(185, 180, 182)";
+  });
 });
 
 buttonClear.addEventListener("click", () => {
-	displayValue = "";
-	calculation.textContent = displayValue;
-	answer.textContent = "";
+  clear();
+  displayValue = "";
+  calculation.textContent = displayValue;
+  answer.textContent = "";
 });
 
 del.addEventListener("click", () => {
-	// Check if last character is a number or operator
-	if (isNaN(parseInt(displayValue.at(-1)))) {
-		displayValue = displayValue.slice(0, -3);
-	} else {
-		displayValue = displayValue.slice(0, -1);
-	}
+  // Check if last character is a number or operator
+  if (isNaN(parseInt(displayValue.at(-1)))) {
+    displayValue = displayValue.slice(0, -3);
+  } else {
+    displayValue = displayValue.slice(0, -1);
+  }
 
-	calculation.textContent = displayValue;
-	answer.textContent = "";
+  calculation.textContent = displayValue;
+  answer.textContent = "";
 });
 
 numbers.addEventListener("click", (event) => {
-	if (current === "evaluated" && event.target.textContent !== " =") {
-		clear();
-	}
-
-	if (event.target.tagName === "BUTTON" && event.target.textContent !== " =") {
-		const buttonText = event.target.textContent;
-		displayValue += buttonText;
-		calculation.textContent = displayValue;
-
-		if (current === "operator") {
-			num2 = buttonText.trim();
-		} else if (current === "number" && !op) {
-			num1 += buttonText.trim();
-		} else {
-			num2 += buttonText.trim();
+  if (event.target.textContent !== " =" && event.target.textContent !== "ans") {
+    if (current === "evaluated") {
+      clear();
+    } else if (current === "ans") {
+			return;
 		}
 
-		current = "number";
-	}
+    if (event.target.tagName === "BUTTON") {
+      const buttonText = event.target.textContent;
+      displayValue += buttonText;
+      calculation.textContent = displayValue;
 
-	if (event.target.textContent !== " =") {
-		answer.textContent = "";
-	}
+      if (current === "operator") {
+        num2 = buttonText.trim();
+      } else if (current === "number" && !op) {
+        num1 += buttonText.trim();
+      } else {
+        num2 += buttonText.trim();
+      }
+
+      current = "number";
+      answer.textContent = "";
+    }
+  }
 });
 
 operators.addEventListener("click", (event) => {
-	if (current === "operator") {
-		return;
-	} else if (current === "evaluated") {
-		clear();
-		num1 = ans;
-	}
+  if (current === "operator") {
+    return;
+  } else if (current === "evaluated" || current === "ans") {
+    clear();
+    num1 = ans;
+  }
 
-	if (current === "evaluated" &&
-		event.target.tagName === "BUTTON") {
-		displayValue = ans;
-	}
-	
-	if (event.target.tagName === "BUTTON") {
+  if (current === "evaluated" &&
+    event.target.tagName === "BUTTON") {
+    displayValue = ans;
+  }
+
+  if (event.target.tagName === "BUTTON") {
     const buttonText = event.target.textContent;
-    
+
     if (op && num2) {
-        num1 = operate(num1 + op + num2);
-        num2 = "";
+      ans = operate(num1 + op + num2);
+      num1 = ans;
+      num2 = "";
+      answerValue = ans;
+      answer.textContent = answerValue;
     } else if (current === "number") {
-        num1 = displayValue;
-        num2 = "";
+      num1 = displayValue;
+      num2 = "";
     }
-    
+
     displayValue = `${num1}${buttonText}`;
     op = buttonText;
     calculation.textContent = displayValue;
-    
+
     current = "operator";
-}
+  }
+});
+
+buttonAns.addEventListener("click", () => {
+  if (current === "evaluated") {
+    clear();
+  }
+
+  if (current === "number") {
+    return;
+  }
+
+  if (!op) {
+    displayValue += ans;
+    calculation.textContent = displayValue;
+    num1 = ans;
+  } else {
+    displayValue += ans;
+    calculation.textContent = displayValue;
+    num2 = ans;
+  }
+
+  current = "ans";
+  answer.textContent = "";
 });
 
 buttonEquals.addEventListener("click", (event) => {
-	if (displayValue.at(0) === " " ||
-	displayValue.includes("  ")) {
-		answer.textContent = "Syntax Error";
-	} else {
-		let answerValue = operate(displayValue);
-		answer.textContent = answerValue;
-		ans = answerValue;
-	}
+  if (displayValue.at(0) === " " ||
+    displayValue.includes("  ")) {
+    answer.textContent = "Syntax Error";
+  } else {
+    let answerValue = operate(displayValue);
+    answer.textContent = answerValue;
+    ans = answerValue;
+  }
 
-	const buttonText = event.target.textContent;
-	displayValue += buttonText;
-	calculation.textContent = displayValue;
+  const buttonText = event.target.textContent;
+  displayValue += buttonText;
+  calculation.textContent = displayValue;
 
-	current = "evaluated";
+  current = "evaluated";
 });
 
 function operate(calc) {
@@ -174,8 +202,8 @@ function operate(calc) {
 }
 
 function clear() {
-	displayValue = "";
-	num1 = "";
-	num2 = "";
-	op = "";
+  displayValue = "";
+  num1 = "";
+  num2 = "";
+  op = "";
 }
