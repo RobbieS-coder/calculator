@@ -1,10 +1,12 @@
-const clear = document.querySelector(".clear");
+const buttonClear = document.querySelector(".clear");
 const del = document.querySelector(".delete");
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector(".display");
 const calculation = document.querySelector(".calculation");
 const answer = document.querySelector(".answer");
 const buttonContainer = document.querySelector(".button-container");
+const numbers = document.querySelector(".numbers");
+const operators = document.querySelector(".operators");
 
 const button1 = document.querySelector(".btn-1");
 const button2 = document.querySelector(".btn-2");
@@ -15,9 +17,16 @@ const button6 = document.querySelector(".btn-6");
 const button7 = document.querySelector(".btn-7");
 const button8 = document.querySelector(".btn-8");
 const button9 = document.querySelector(".btn-9");
-const buttonDecimal = document.querySelector(".btn-decimal");
+const buttonAns = document.querySelector(".btn-ans");
 const button0 = document.querySelector(".btn-0");
 const buttonEquals = document.querySelector(".btn-equals");
+
+let displayValue = "";
+let ans = "";
+let current = "";
+let num1 = "";
+let num2 = "";
+let op = "";
 
 buttons.forEach(button => {
 	button.addEventListener("mouseenter", () => {
@@ -37,7 +46,7 @@ buttons.forEach(button => {
 	});
 });
 
-clear.addEventListener("click", () => {
+buttonClear.addEventListener("click", () => {
 	displayValue = "";
 	calculation.textContent = displayValue;
 	answer.textContent = "";
@@ -45,7 +54,7 @@ clear.addEventListener("click", () => {
 
 del.addEventListener("click", () => {
 	// Check if last character is a number or operator
-	if (displayValue.at(-1) === " ") {
+	if (isNaN(parseInt(displayValue.at(-1)))) {
 		displayValue = displayValue.slice(0, -3);
 	} else {
 		displayValue = displayValue.slice(0, -1);
@@ -55,11 +64,25 @@ del.addEventListener("click", () => {
 	answer.textContent = "";
 });
 
-buttonContainer.addEventListener("click", (event) => {
-	if (event.target.tagName === "BUTTON") {
+numbers.addEventListener("click", (event) => {
+	if (current === "evaluated" && event.target.textContent !== " =") {
+		clear();
+	}
+
+	if (event.target.tagName === "BUTTON" && event.target.textContent !== " =") {
 		const buttonText = event.target.textContent;
 		displayValue += buttonText;
 		calculation.textContent = displayValue;
+
+		if (current === "operator") {
+			num2 = buttonText.trim();
+		} else if (current === "number" && !op) {
+			num1 += buttonText.trim();
+		} else {
+			num2 += buttonText.trim();
+		}
+
+		current = "number";
 	}
 
 	if (event.target.textContent !== " =") {
@@ -67,15 +90,53 @@ buttonContainer.addEventListener("click", (event) => {
 	}
 });
 
-buttonEquals.addEventListener("click", () => {
+operators.addEventListener("click", (event) => {
+	if (current === "operator") {
+		return;
+	} else if (current === "evaluated") {
+		clear();
+		num1 = ans;
+	}
+
+	if (current === "evaluated" &&
+		event.target.tagName === "BUTTON") {
+		displayValue = ans;
+	}
+	
+	if (event.target.tagName === "BUTTON") {
+    const buttonText = event.target.textContent;
+    
+    if (op && num2) {
+        num1 = operate(num1 + op + num2);
+        num2 = "";
+    } else if (current === "number") {
+        num1 = displayValue;
+        num2 = "";
+    }
+    
+    displayValue = `${num1}${buttonText}`;
+    op = buttonText;
+    calculation.textContent = displayValue;
+    
+    current = "operator";
+}
+});
+
+buttonEquals.addEventListener("click", (event) => {
 	if (displayValue.at(0) === " " ||
 	displayValue.includes("  ")) {
 		answer.textContent = "Syntax Error";
 	} else {
 		let answerValue = operate(displayValue);
 		answer.textContent = answerValue;
-		// displayValue = "";
+		ans = answerValue;
 	}
+
+	const buttonText = event.target.textContent;
+	displayValue += buttonText;
+	calculation.textContent = displayValue;
+
+	current = "evaluated";
 });
 
 function operate(calc) {
@@ -112,4 +173,9 @@ function operate(calc) {
   return result.toString();
 }
 
-let displayValue = "";
+function clear() {
+	displayValue = "";
+	num1 = "";
+	num2 = "";
+	op = "";
+}
