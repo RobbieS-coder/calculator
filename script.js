@@ -23,7 +23,7 @@ const buttonEquals = document.querySelector(".btn-equals");
 
 let displayValue = "";
 let ans = "";
-let current = "";
+let current = "operator";
 let num1 = "";
 let num2 = "";
 let op = "";
@@ -109,6 +109,7 @@ operators.addEventListener("click", (event) => {
     const buttonText = event.target.textContent;
 
     if (op && num2) {
+			if (!isNaN(parseInt(operate(num1 + op + num2))))
       ans = operate(num1 + op + num2);
       num1 = ans;
       num2 = "";
@@ -132,7 +133,7 @@ buttonAns.addEventListener("click", () => {
     clear();
   }
 
-  if (current === "number") {
+  if (current === "number" || current === "ans" || ans === "") {
     return;
   }
 
