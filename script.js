@@ -158,7 +158,10 @@ buttonEquals.addEventListener("click", (event) => {
   } else {
     let answerValue = operate(displayValue);
     answer.textContent = answerValue;
-    ans = answerValue;
+
+		if (!isNaN(parseFloat(answerValue))) {
+			ans = answerValue;
+		}
   }
 
   const buttonText = event.target.textContent;
