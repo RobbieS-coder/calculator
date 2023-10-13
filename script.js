@@ -1,24 +1,12 @@
 const buttonClear = document.querySelector(".clear");
 const del = document.querySelector(".delete");
 const buttons = document.querySelectorAll("button");
-const display = document.querySelector(".display");
 const calculation = document.querySelector(".calculation");
 const answer = document.querySelector(".answer");
-const buttonContainer = document.querySelector(".button-container");
 const numbers = document.querySelector(".numbers");
 const operators = document.querySelector(".operators");
 
-const button1 = document.querySelector(".btn-1");
-const button2 = document.querySelector(".btn-2");
-const button3 = document.querySelector(".btn-3");
-const button4 = document.querySelector(".btn-4");
-const button5 = document.querySelector(".btn-5");
-const button6 = document.querySelector(".btn-6");
-const button7 = document.querySelector(".btn-7");
-const button8 = document.querySelector(".btn-8");
-const button9 = document.querySelector(".btn-9");
 const buttonAns = document.querySelector(".btn-ans");
-const button0 = document.querySelector(".btn-0");
 const buttonEquals = document.querySelector(".btn-equals");
 
 let displayValue = "";
